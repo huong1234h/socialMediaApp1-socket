@@ -1,11 +1,25 @@
+
+const express = require("express");
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+
+app.use(cors());
+const server = http.createServer(app);
+
 require('dotenv').config()
 
 
-const io = require("socket.io")(process.env.PORT, {
-    cors: {
-      origin: process.env.REACT_URL,
-    },
-  });
+
+
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.REACt_URL,
+    methods: ["GET", "POST"],
+  },
+});
   
   let users = [];
   
@@ -49,4 +63,8 @@ const io = require("socket.io")(process.env.PORT, {
       removeUser(socket?.id);
       io.emit("getUsers", users);
     });
+  });
+
+  server.listen(process.env.PORT, () => {
+    console.log("SERVER IS RUNNING");
   });
